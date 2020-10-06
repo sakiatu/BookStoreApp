@@ -16,22 +16,15 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         user = FirebaseAuth.getInstance().getCurrentUser();
 
         if (user == null) {
-            showSplashScreen();
             openAuthActivity();
             finish();
         }
     }
 
     private void openAuthActivity() {
-
         startActivity(new Intent(this, AuthActivity.class));
-    }
-
-    private void showSplashScreen() {
-       startActivity(new Intent(this,SplashScreen.class));
     }
 }
