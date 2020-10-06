@@ -20,12 +20,18 @@ public class MainActivity extends AppCompatActivity {
         user = FirebaseAuth.getInstance().getCurrentUser();
 
         if (user == null) {
+            showSplashScreen();
             openAuthActivity();
             finish();
         }
     }
 
     private void openAuthActivity() {
+
         startActivity(new Intent(this, AuthActivity.class));
+    }
+
+    private void showSplashScreen() {
+       startActivity(new Intent(this,SplashScreen.class));
     }
 }
