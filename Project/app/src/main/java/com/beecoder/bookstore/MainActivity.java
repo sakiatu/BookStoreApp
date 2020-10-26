@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.beecoder.bookstore.Authentication.AuthActivity;
+import com.beecoder.bookstore.sell.SellingActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -46,7 +47,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void openSellingActivity() {
-
+        Intent intent = new Intent(this,SellingActivity.class);
+        startActivity(intent);
     }
 
     private void openAuthActivity() {
