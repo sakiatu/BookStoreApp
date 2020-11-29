@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AddBooks">
+
+    <EditText
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:hint="Title"
+        android:id="@+id/edit_txt_title"
+        android:layout_marginTop="50dp"
+        android:layout_marginLeft="30dp"
+        />
+    <EditText
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:hint="Author Name"
+        android:id="@+id/edit_txt_author"
+        android:layout_marginTop="130dp"
+        android:layout_marginLeft="30dp"
+        />
+    <EditText
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:hint="Edition"
+        android:id="@+id/edit_txt_edition"
+        android:layout_marginTop="210dp"
+        android:layout_marginLeft="30dp"
+        />
+    <EditText
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:hint="Price"
+        android:id="@+id/edit_txt_price"
+        android:layout_marginTop="290dp"
+        android:layout_marginLeft="30dp"
+        />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:gravity="center_horizontal"
+        android:text="ADD"
+        android:id="@+id/btn_add"
+        android:onClick="Addingbooks"
+        android:layout_marginTop="400dp"
+        android:layout_marginLeft="150dp"/>
+
+</RelativeLayout>
