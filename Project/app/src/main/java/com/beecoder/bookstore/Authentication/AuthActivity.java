@@ -50,6 +50,7 @@ public class AuthActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == RC_AUTH && resultCode == RESULT_OK) {
             openMainActivity();
+            finish();
         }
 
     }
