@@ -9,8 +9,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".AddBooks"></activity>
-        <activity android:name=".sell.SellingActivity"></activity>
+        <activity android:name=".Catalog"></activity>
+        <activity android:name=".AddBooks" />
+        <activity android:name=".sell.SellingActivity" />
         <activity android:name=".SplashScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
