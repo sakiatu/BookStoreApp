@@ -18,7 +18,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class AddBooks extends AppCompatActivity {
-    private static final String TAG = "AddBooksInDatabase";
+    private static final String TAG = "AddBooks";
     EditText text1,text2,text3,text4;
     Button btn;
     FirebaseFirestore firestore = FirebaseFirestore.getInstance();
@@ -49,11 +49,16 @@ public class AddBooks extends AppCompatActivity {
         map.put("Price",price);
 
         firestore.collection("Books").add(map)
-                .addOnSuccessListener(documentReference -> Log.d(TAG,"Successful"))
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Log.d(TAG,"Successful");
+                    }
+                })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.d(TAG,e.getLocalizedMessage());
+                        Log.d(TAG,"Failed");
                     }
                 });
 
