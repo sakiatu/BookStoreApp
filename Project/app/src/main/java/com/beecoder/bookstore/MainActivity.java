@@ -14,13 +14,15 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.beecoder.bookstore.Authentication.AuthActivity;
 import com.beecoder.bookstore.sell.SellingActivity;
+import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private FirebaseUser user;
     private DrawerLayout drawerLayout;
     private Toolbar toolbar;
+    private NavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,9 +34,7 @@ public class MainActivity extends AppCompatActivity {
             finish();
         }
         setupToolbar();
-        setUpNavigationDrawer();
-//        fab = findViewById(R.id.fab_edit);
-//        fab.setOnClickListener(view -> openAddBookActivity());
+        setUpNavigationDrawer(savedInstanceState);
     }
 
     private void openAuthActivity() {
@@ -46,21 +46,23 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
     }
 
-    private void setUpNavigationDrawer() {
+    private void setUpNavigationDrawer(Bundle saveInstanceState) {
         drawerLayout = findViewById(R.id.drawer);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.openDrawerContent, R.string.closeDrawerContent);
         toggle.setDrawerIndicatorEnabled(true);
         drawerLayout.addDrawerListener(toggle);
+        navigationView = findViewById(R.id.navigation);
+        navigationView.setNavigationItemSelectedListener(this);
         toggle.syncState();
+
+        if (saveInstanceState == null) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
+            navigationView.setCheckedItem(R.id.home_item);
+        }
     }
 
     private void openSellingActivity() {
         Intent intent = new Intent(this, SellingActivity.class);
-        startActivity(intent);
-    }
-
-    private void openAddBookActivity() {
-        Intent intent = new Intent(MainActivity.this, AddBooks.class);
         startActivity(intent);
     }
 
@@ -85,5 +87,20 @@ public class MainActivity extends AppCompatActivity {
         if (drawerLayout.isDrawerOpen(GravityCompat.START))
             drawerLayout.closeDrawer(GravityCompat.START);
         else super.onBackPressed();
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        navigationView.setCheckedItem(item.getItemId());
+        switch (item.getItemId()) {
+            case R.id.home_item:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
+                break;
+            case R.id.catalogue_item:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new CatalogueFragment()).commit();
+                break;
+        }
+        drawerLayout.closeDrawer(GravityCompat.START);
+        return false;
     }
 }

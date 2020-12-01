@@ -17,11 +17,11 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.HashMap;
 import java.util.Map;
 
-public class AddBooks extends AppCompatActivity {
+public class AddBookActivity extends AppCompatActivity {
     private static final String TAG = "AddBooks";
-    EditText text1,text2,text3,text4;
-    Button btn;
-    FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+    private EditText text1,text2,text3,text4;
+    private Button btn;
+    private FirebaseFirestore firestore = FirebaseFirestore.getInstance();
 
 
     @Override

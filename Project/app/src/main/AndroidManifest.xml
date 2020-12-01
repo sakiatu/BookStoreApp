@@ -10,8 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".MathBooks"></activity>
-        <activity android:name=".Catalog" />
-        <activity android:name=".AddBooks" />
+        <activity android:name=".AddBookActivity" />
         <activity android:name=".sell.SellingActivity" />
         <activity android:name=".SplashScreen">
             <intent-filter>
