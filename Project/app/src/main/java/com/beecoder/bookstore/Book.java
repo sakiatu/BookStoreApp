@@ -16,6 +16,9 @@ public class Book {
         this.Category=Category;
     }
 
+    public Book() {
+    }
+
     public String getCategory() {
         return Category;
     }

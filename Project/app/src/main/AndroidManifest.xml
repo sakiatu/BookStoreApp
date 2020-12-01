@@ -9,7 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MathBooks"></activity>
+        <activity android:name=".MathCatelogActivity"></activity>
         <activity android:name=".AddBookActivity" />
         <activity android:name=".sell.SellingActivity" />
         <activity android:name=".SplashScreen">

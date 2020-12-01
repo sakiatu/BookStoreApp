@@ -11,15 +11,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 
-public class BookRecylcerViewAdapter extends FirestoreRecyclerAdapter <Book, BookRecylcerViewAdapter.bookHolder> {
+public class BookAdapter extends FirestoreRecyclerAdapter <Book, BookAdapter.bookHolder> {
 
-    /**
-     * Create a new RecyclerView adapter that listens to a Firestore Query.  See {@link
-     * FirestoreRecyclerOptions} for configuration options.
-     *
-     * @param options
-     */
-    public BookRecylcerViewAdapter(@NonNull FirestoreRecyclerOptions<Book> options) {
+    public BookAdapter(@NonNull FirestoreRecyclerOptions<Book> options) {
         super(options);
     }
 
@@ -36,7 +30,7 @@ public class BookRecylcerViewAdapter extends FirestoreRecyclerAdapter <Book, Boo
     @Override
     public bookHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
-        View view = layoutInflater.inflate(R.layout.recycler_view_list,parent,false);
+        View view = layoutInflater.inflate(R.layout.book_item,parent,false);
         return new bookHolder(view);
     }
 
@@ -46,7 +40,7 @@ public class BookRecylcerViewAdapter extends FirestoreRecyclerAdapter <Book, Boo
 
         public bookHolder(@NonNull View itemView) {
             super(itemView);
-            bookName=itemView.findViewById(R.id.txt_bookname);
+            bookName=itemView.findViewById(R.id.txt_bookName);
             authorName=itemView.findViewById(R.id.txt_authorName);
             edition=itemView.findViewById(R.id.txt_eiditipn);
             price=itemView.findViewById(R.id.txt_price);
