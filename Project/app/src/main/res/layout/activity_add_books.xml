@@ -39,6 +39,23 @@
         android:layout_marginLeft="30dp"
         />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Select Category:"
+        android:textSize="16sp"
+        android:layout_marginLeft="30dp"
+        android:textStyle="bold"
+        android:layout_marginTop="360dp"/>
+
+    <Spinner
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/spin_category"
+        android:layout_marginLeft="160dp"
+        android:layout_marginTop="360dp"
+     />
+
     <Button
         android:layout_width="wrap_content"
         android:layout_height="50dp"
@@ -46,7 +63,7 @@
         android:text="ADD"
         android:id="@+id/btn_add"
         android:onClick="Addingbooks"
-        android:layout_marginTop="400dp"
+        android:layout_marginTop="490dp"
         android:layout_marginLeft="150dp"/>
 
 </RelativeLayout>
