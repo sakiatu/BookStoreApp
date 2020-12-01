@@ -18,9 +18,6 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class AddBooks extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     private static final String TAG = "AddBooks";
     EditText text1,text2,text3,text4;
@@ -51,21 +48,11 @@ public class AddBooks extends AppCompatActivity implements AdapterView.OnItemSel
 
     }
 
-    public void Addingbooks(View view) {
-       String bookName= text1.getText().toString();
-       String authorName = text2.getText().toString();
-       String edition= text3.getText().toString();
-       String price= text4.getText().toString();
-       String category = spinner.getSelectedItem().toString();
 
-        Map<String,String> map = new HashMap<>();
-        map.put("Title",bookName);
-        map.put("Author",authorName);
-        map.put("Edition",edition);
-        map.put("Price",price);
-        map.put("Category",category);
-
-        firestore.collection("Books").add(map)
+    private void addBook(String bookname,String authorName,String edition,String price,String category)
+    {
+        Book book = new Book(bookname,authorName,edition,price,category);
+        firestore.collection("Books").add(book)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
@@ -79,7 +66,18 @@ public class AddBooks extends AppCompatActivity implements AdapterView.OnItemSel
                     }
                 });
 
-        startActivity(new Intent(AddBooks.this,Catalog.class));
+    }
+
+    public void Addingbooks(View view) {
+       String bookName= text1.getText().toString();
+       String authorName = text2.getText().toString();
+       String edition= text3.getText().toString();
+       String price= text4.getText().toString();
+       String category = spinner.getSelectedItem().toString();
+
+       addBook(bookName,authorName,edition,price,category);
+
+       startActivity(new Intent(AddBooks.this,Catalog.class));
 
     }
 
