@@ -33,7 +33,7 @@ public class AuthActivity extends AppCompatActivity {
 
     private void handleAuth() {
         List<AuthUI.IdpConfig> providers = Arrays.asList(
-                new AuthUI.IdpConfig.PhoneBuilder().build()
+                new AuthUI.IdpConfig.EmailBuilder().build()
         );
 
         startActivityForResult(

@@ -2,8 +2,11 @@ package com.beecoder.bookstore;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -32,9 +35,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (user == null) {
             openAuthActivity();
             finish();
+        }else {
+            setupToolbar();
+            setUpNavigationDrawer(savedInstanceState);
         }
-        setupToolbar();
-        setUpNavigationDrawer(savedInstanceState);
     }
 
     private void openAuthActivity() {
@@ -59,6 +63,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
             navigationView.setCheckedItem(R.id.home_item);
         }
+
+        View headerView = navigationView.getHeaderView(0);
+        TextView username = headerView.findViewById(R.id.username);
+        TextView email = headerView.findViewById(R.id.email);
+        username.setText(user.getDisplayName());
+        email.setText(user.getEmail());
     }
 
     private void openSellingActivity() {
