@@ -7,16 +7,26 @@ public class Book {
     String Edition;
     String Price;
     String Category;
+   String ImageUrl;
 
-    public Book(String title,String authorName,String Edition,String Price,String Category) {
+    public Book(String title,String authorName,String Edition,String Price,String Category,String ImageUrl) {
         this.title = title;
         this.authorName=authorName;
         this.Edition= Edition;
         this.Price=Price;
         this.Category=Category;
+        this.ImageUrl=ImageUrl;
     }
 
     public Book() {
+    }
+
+    public String getImageUrl() {
+        return ImageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        ImageUrl = imageUrl;
     }
 
     public String getCategory() {

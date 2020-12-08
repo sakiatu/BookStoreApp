@@ -34,7 +34,7 @@ public class MathCatelogActivity extends AppCompatActivity {
                 .setQuery(query, Book.class)
                 .build();
 
-        adapter = new BookAdapter(options);
+        adapter = new BookAdapter(options,this);
         recyclerView.setAdapter(adapter);
         adapter.startListening();
     }

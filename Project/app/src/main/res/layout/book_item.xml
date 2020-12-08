@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="144dp"
+    android:layout_height="150dp"
     android:layout_marginTop="8dp"
     android:layout_marginLeft="8dp"
     android:layout_marginRight="8dp"
@@ -62,9 +62,32 @@
             android:layout_height="wrap_content"
             android:text="Math" />
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            >
 
+            <Button
+                android:layout_width="200dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="end"
+                android:id="@+id/btn_addCart"
+                android:textAlignment="textEnd"
+                android:background="@android:color/white"
+                android:textColor="@android:color/holo_blue_dark"
+                android:textSize="16sp"
+                android:text="Add to Cart"
+                android:textStyle="bold"/>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:src="@drawable/cart_icon"
+                android:layout_gravity="right"
+                />
+        </LinearLayout>
     </LinearLayout>
 
-</LinearLayout>
+    </LinearLayout>
 
 </androidx.cardview.widget.CardView>
