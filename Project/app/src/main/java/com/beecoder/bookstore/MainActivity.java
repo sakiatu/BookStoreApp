@@ -2,8 +2,6 @@ package com.beecoder.bookstore;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -14,9 +12,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
 
 import com.beecoder.bookstore.Authentication.AuthActivity;
-import com.beecoder.bookstore.sell.SellingActivity;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -35,7 +33,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (user == null) {
             openAuthActivity();
             finish();
-        }else {
+        } else {
             setupToolbar();
             setUpNavigationDrawer(savedInstanceState);
         }
@@ -71,31 +69,34 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         email.setText(user.getEmail());
     }
 
-    private void openSellingActivity() {
-        Intent intent = new Intent(this, SellingActivity.class);
-        startActivity(intent);
-    }
+    /* private void openSellingActivity() {
+         Intent intent = new Intent(this, SellingActivity.class);
+         startActivity(intent);
+     }
 
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main_menu, menu);
-        return super.onPrepareOptionsMenu(menu);
-    }
+     @Override
+     public boolean onPrepareOptionsMenu(Menu menu) {
+         getMenuInflater().inflate(R.menu.main_menu, menu);
+         return super.onPrepareOptionsMenu(menu);
+     }
 
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_sell:
-                openSellingActivity();
-                break;
-        }
-        return true;
-    }
-
+     @Override
+     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+         switch (item.getItemId()) {
+             case R.id.action_sell:
+                 openSellingActivity();
+                 break;
+         }
+         return true;
+     }
+ */
     @Override
     public void onBackPressed() {
-        if (drawerLayout.isDrawerOpen(GravityCompat.START))
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START);
+        } else if (!(fragment instanceof HomeFragment))
+            setFragment(new HomeFragment());
         else super.onBackPressed();
     }
 
@@ -104,13 +105,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setCheckedItem(item.getItemId());
         switch (item.getItemId()) {
             case R.id.home_item:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
+                setFragment(new HomeFragment());
                 break;
             case R.id.catalogue_item:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new CatalogueFragment()).commit();
+                setFragment(new CatalogueFragment());
+                break;
+            case R.id.profile_item:
+                setFragment(new ProfileFragment());
                 break;
         }
         drawerLayout.closeDrawer(GravityCompat.START);
-        return false;
+        return true;
+    }
+
+    private void setFragment(Fragment fragment) {
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
     }
 }

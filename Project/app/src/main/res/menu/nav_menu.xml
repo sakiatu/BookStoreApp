@@ -9,6 +9,9 @@
         <item
             android:id="@+id/catalogue_item"
             android:title="Catalogue" />
+        <item
+            android:id="@+id/profile_item"
+            android:title="Profile" />
     </group>
 
     <item android:title="Communicate">

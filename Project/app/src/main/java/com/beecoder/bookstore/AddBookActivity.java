@@ -17,42 +17,40 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
+
+import java.util.ArrayList;
 
 public class AddBookActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     private final int IMG_REQUEST_ID = 10;
     private static final String TAG = "AddBooks";
-    private EditText text1, text2, text3, text4;
+    private EditText title_edt, author_edt, edition_edt, price_edt;
     private Button btn;
     private Spinner spinner;
     private Button btnUpload;
 
     private Uri uri;
-
-    String filePath;
-
-    private UploadTask uploadTask;
-
+    private String filePath;
     private FirebaseFirestore firestore = FirebaseFirestore.getInstance();
 
     private FirebaseStorage storage;
     private StorageReference reference;
 
     private Book book = new Book();
-    private String[] category = {"Math", "Data Structure", "Algorithm", "Story Books"};
+//    private String[] category = {"Math", "Data Structure", "Algorithm", "Story Books"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_books);
-        text1 = findViewById(R.id.edit_txt_title);
-        text2 = findViewById(R.id.edit_txt_author);
-        text3 = findViewById(R.id.edit_txt_edition);
-        text4 = findViewById(R.id.edit_txt_price);
+        title_edt = findViewById(R.id.edit_txt_title);
+        author_edt = findViewById(R.id.edit_txt_author);
+        edition_edt = findViewById(R.id.edit_txt_edition);
+        price_edt = findViewById(R.id.edit_txt_price);
 
         btn = findViewById(R.id.btn_add);
         btnUpload = findViewById(R.id.btn_upload_img);
@@ -61,26 +59,34 @@ public class AddBookActivity extends AppCompatActivity implements AdapterView.On
         reference = storage.getReference();
 
         spinner = findViewById(R.id.spin_category);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, category);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
-        spinner.setOnItemSelectedListener(this);
-
+        setupCategorySpinner();
         setToolbar();
+    }
+
+    private void setupCategorySpinner() {
+        firestore.collection("Category").get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    ArrayList<String> category = new ArrayList<>();
+                    for (DocumentSnapshot document : queryDocumentSnapshots)
+                        category.add(document.toObject(Category.class).getName());
+                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, category);
+                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    spinner.setAdapter(adapter);
+                    spinner.setOnItemSelectedListener(this);
+                });
     }
 
     private void setToolbar() {
         Toolbar toolbar = findViewById(R.id.toolbar);
         TextView title = toolbar.findViewById(R.id.tv_title_toolbar);
         title.setText("Add Book");
-
     }
 
     public void addBook(View view) {
-        String title = text1.getText().toString();
-        String authorName = text2.getText().toString();
-        String edition = text3.getText().toString();
-        String price = text4.getText().toString();
+        String title = title_edt.getText().toString();
+        String authorName = author_edt.getText().toString();
+        String edition = edition_edt.getText().toString();
+        String price = price_edt.getText().toString();
         String categoryName = spinner.getSelectedItem().toString();
 
         book.setTitle(title);

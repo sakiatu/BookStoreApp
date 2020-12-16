@@ -1,8 +1,10 @@
 package com.beecoder.bookstore;
 
 import android.os.Bundle;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
@@ -10,32 +12,39 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
-public class MathCatelogActivity extends AppCompatActivity {
-
-    RecyclerView recyclerView;
-    BookAdapter adapter;
+public class CategoryItemActivity extends AppCompatActivity {
+    private RecyclerView bookRecyclerView;
+    private BookAdapter adapter;
+    private String category;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_math_books);
+        setContentView(R.layout.activity_category_item);
+        bookRecyclerView = findViewById(R.id.book_recyclerView);
+        category = getIntent().getStringExtra("category");
 
-        recyclerView = findViewById(R.id.book_recyclerView);
+        setToolbar();
+    }
 
+    private void setToolbar() {
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        TextView title = toolbar.findViewById(R.id.tv_title_toolbar);
+        title.setText(category);
 
     }
 
-    private void initMathList() {
+    private void initCategoryList() {
         Query query = FirebaseFirestore.getInstance()
                 .collection("Books")
-                .whereEqualTo("category", "Math");
+                .whereEqualTo("category", category);
 
         FirestoreRecyclerOptions options = new FirestoreRecyclerOptions.Builder<Book>()
                 .setQuery(query, Book.class)
                 .build();
 
-        adapter = new BookAdapter(options,this);
-        recyclerView.setAdapter(adapter);
+        adapter = new BookAdapter(options, this);
+        bookRecyclerView.setAdapter(adapter);
         adapter.startListening();
     }
 
@@ -56,7 +65,8 @@ public class MathCatelogActivity extends AppCompatActivity {
         if (adapter != null)
             adapter.stopListening();
     }
+
     private FirebaseAuth.AuthStateListener authStateListener = firebaseAuth -> {
-        if (firebaseAuth.getCurrentUser() != null) initMathList();
+        if (firebaseAuth.getCurrentUser() != null) initCategoryList();
     };
 }

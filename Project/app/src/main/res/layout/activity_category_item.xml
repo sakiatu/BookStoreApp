@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".MathCatelogActivity">
+    tools:context=".CategoryItemActivity">
 
     <include layout="@layout/toolbar" />
 
@@ -13,5 +13,7 @@
         android:id="@+id/book_recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:listitem="@layout/book_item" />
+
 </LinearLayout>
