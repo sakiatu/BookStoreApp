@@ -34,7 +34,6 @@ public class BookAdapter extends FirestoreRecyclerAdapter <Book, BookAdapter.boo
         holder.category.setText(book.getCategory());
         Glide.with(context).load(book.getImageUrl()).into(holder.bookCover);
 
-
     }
 
     @NonNull

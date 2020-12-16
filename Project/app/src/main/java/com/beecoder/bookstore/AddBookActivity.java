@@ -13,24 +13,18 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import com.google.android.gms.tasks.Continuation;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-import java.util.UUID;
-
 public class AddBookActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
-    private final int IMG_REQUEST_ID=10;
+    private final int IMG_REQUEST_ID = 10;
     private static final String TAG = "AddBooks";
     private EditText text1, text2, text3, text4;
     private Button btn;
@@ -48,6 +42,7 @@ public class AddBookActivity extends AppCompatActivity implements AdapterView.On
     private FirebaseStorage storage;
     private StorageReference reference;
 
+    private Book book = new Book();
     private String[] category = {"Math", "Data Structure", "Algorithm", "Story Books"};
 
     @Override
@@ -60,7 +55,7 @@ public class AddBookActivity extends AppCompatActivity implements AdapterView.On
         text4 = findViewById(R.id.edit_txt_price);
 
         btn = findViewById(R.id.btn_add);
-        btnUpload=findViewById(R.id.btn_upload_img);
+        btnUpload = findViewById(R.id.btn_upload_img);
 
         storage = FirebaseStorage.getInstance();
         reference = storage.getReference();
@@ -88,13 +83,11 @@ public class AddBookActivity extends AppCompatActivity implements AdapterView.On
         String price = text4.getText().toString();
         String categoryName = spinner.getSelectedItem().toString();
 
-
-        firestore.collection("Books").add(new Book(title, authorName, edition, price, categoryName,filePath))
-                .addOnSuccessListener(documentReference -> {
-                    Toast.makeText(this, "request sent to admin...", Toast.LENGTH_SHORT).show();
-                    finish();
-                })
-                .addOnFailureListener(e -> Log.d(TAG, "Failed"));
+        book.setTitle(title);
+        book.setAuthorName(authorName);
+        book.setEdition(edition);
+        book.setPrice(price);
+        book.setCategory(categoryName);
 
         saveImage();
 
@@ -114,41 +107,64 @@ public class AddBookActivity extends AppCompatActivity implements AdapterView.On
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(intent.ACTION_GET_CONTENT);
-        startActivityForResult(intent.createChooser(intent,"Selected Image"),IMG_REQUEST_ID);
+        startActivityForResult(intent.createChooser(intent, "Selected Image"), IMG_REQUEST_ID);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode==IMG_REQUEST_ID && resultCode==RESULT_OK && data != null&& data.getData()!=null)
-        {
-            uri=data.getData();
+        if (requestCode == IMG_REQUEST_ID && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            uri = data.getData();
         }
     }
 
 
-    public void saveImage()
-    {
+    public void saveImage() {
         /*ProgressDialog progressDialog
                 = new ProgressDialog(this);
         progressDialog.setTitle("Uploading...");
         progressDialog.show();*/
 
-        if(uri!= null)
+        reference = storage.getReference().child("News").child(uri.hashCode() + "");
+        reference.putFile(uri)
+                .addOnSuccessListener(s -> {
+                    reference.getDownloadUrl()
+                            .addOnSuccessListener(uri -> {
+                                filePath = uri.toString();
+                                book.setImageUrl(filePath);
+
+
+                                firestore.collection("Books").add(book)
+                                        .addOnSuccessListener(documentReference -> {
+                                            Toast.makeText(this, "request sent to admin...", Toast.LENGTH_SHORT).show();
+                                            finish();
+                                        })
+                                        .addOnFailureListener(e -> Log.d(TAG, "Failed"));
+                            });
+                });
+
+
+    }
+}
+
+
+       /* if(uri!= null)
         {
             StorageReference storageReference = reference.child("image/" + UUID.randomUUID().toString());
 
-            uploadTask = storageReference.putFile(uri);
-            Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+            storageReference.putFile(uri).getResult().getUploadSessionUri()
+          // uploadTask.getResult()
+
+           *//* continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
                 @Override
                 public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
                     if (!task.isSuccessful()) {
                         throw task.getException();
                     }
-
+*//*
                     // Continue with the task to get the download URL
-                    return storageReference.getDownloadUrl();
+                   // return storageReference.getDownloadUrl();
                 }
             }).addOnCompleteListener(new OnCompleteListener<Uri>() {
                         @Override
@@ -161,7 +177,5 @@ public class AddBookActivity extends AppCompatActivity implements AdapterView.On
 
                             }
                         }
-                    });
-        }
-    }
-}
+                    });*/
+
