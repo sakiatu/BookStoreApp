@@ -15,6 +15,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
 import com.beecoder.bookstore.Authentication.AuthActivity;
+import com.firebase.ui.auth.AuthUI;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -113,6 +114,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.profile_item:
                 setFragment(new ProfileFragment());
                 break;
+            case R.id.logOut_item:
+                AuthUI.getInstance().signOut(MainActivity.this);
+                startActivity(new Intent(MainActivity.this, AuthActivity.class));
+                finish();
         }
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;

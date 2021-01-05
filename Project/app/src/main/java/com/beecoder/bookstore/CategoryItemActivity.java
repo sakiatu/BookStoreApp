@@ -1,10 +1,12 @@
 package com.beecoder.bookstore;
 
 import android.os.Bundle;
+import android.widget.GridLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
@@ -44,6 +46,9 @@ public class CategoryItemActivity extends AppCompatActivity {
                 .build();
 
         adapter = new BookAdapter(options, this);
+
+       /* GridLayoutManager gridLayoutManager=new GridLayoutManager(this,2);
+        bookRecyclerView.setLayoutManager(gridLayoutManager);*/
         bookRecyclerView.setAdapter(adapter);
         adapter.startListening();
     }
