@@ -19,8 +19,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 
 public class BookAdapter extends FirestoreRecyclerAdapter<Book, BookAdapter.bookHolder> {
 
-    Context context;
-
+    private Context context;
     public OnAddToCartClickListener onAddToCartClickListener;
 
     public interface OnAddToCartClickListener {
@@ -31,9 +30,9 @@ public class BookAdapter extends FirestoreRecyclerAdapter<Book, BookAdapter.book
         this.onAddToCartClickListener = onAddToCartClickListener;
     }
 
-    public BookAdapter(@NonNull FirestoreRecyclerOptions<Book> options,Context context) {
+    public BookAdapter(@NonNull FirestoreRecyclerOptions<Book> options, Context context) {
         super(options);
-       this.context = context;
+        this.context = context;
     }
 
     @Override
@@ -55,8 +54,7 @@ public class BookAdapter extends FirestoreRecyclerAdapter<Book, BookAdapter.book
     @NonNull
     @Override
     public bookHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
-        View view = layoutInflater.inflate(R.layout.book_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.book_item, parent, false);
         return new bookHolder(view);
     }
 
@@ -75,6 +73,6 @@ public class BookAdapter extends FirestoreRecyclerAdapter<Book, BookAdapter.book
             category = itemView.findViewById(R.id.txt_category);
             bookCover = itemView.findViewById(R.id.bookCover);
             btn_addCart = itemView.findViewById(R.id.btn_addCart);
-            }
+        }
     }
 }

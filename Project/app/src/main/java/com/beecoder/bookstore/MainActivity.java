@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -31,13 +32,30 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         user = FirebaseAuth.getInstance().getCurrentUser();
+
         if (user == null) {
             openAuthActivity();
             finish();
         } else {
+            setUserValues();
             setupToolbar();
             setUpNavigationDrawer(savedInstanceState);
         }
+    }
+
+    private void setUserValues() {
+        CurrentUser.getUserDoc()
+                .get().addOnSuccessListener(snapshot -> {
+            if (snapshot.exists()) {
+                User currentUser = snapshot.toObject(User.class);
+                CurrentUser.getCurrentUser().setName(user.getDisplayName());
+                CurrentUser.getCurrentUser().setEmail(user.getEmail());
+                CurrentUser.getCurrentUser().setPhoneNumber(currentUser.getPhoneNumber());
+                CurrentUser.getCurrentUser().setPhotoUrl(currentUser.getPhotoUrl());
+
+                Toast.makeText(this, "Asi mamah", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void openAuthActivity() {

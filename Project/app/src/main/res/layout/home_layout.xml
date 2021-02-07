@@ -1,26 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-          <androidx.recyclerview.widget.RecyclerView
-              android:id="@+id/book_recyclerList"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-              app:spanCount="2"
-              tools:listitem="@layout/book_item" />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/book_recyclerList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:listitem="@layout/book_item" />
 
-     <com.google.android.material.floatingactionbutton.FloatingActionButton
-             android:id="@+id/fab"
-             android:layout_width="wrap_content"
-             android:layout_height="wrap_content"
-             android:layout_alignParentBottom="true"
-             android:layout_centerHorizontal="true"
-             android:layout_marginBottom="36dp"
-             android:background="@android:color/holo_blue_light"
-             android:src="@drawable/ic_add" />
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="36dp"
+        android:background="@android:color/holo_blue_light"
+        android:src="@drawable/ic_add" />
 
 </RelativeLayout>

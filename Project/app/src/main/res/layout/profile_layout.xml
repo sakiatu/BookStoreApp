@@ -6,6 +6,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:background="@drawable/profile">
+
     <androidx.cardview.widget.CardView
         android:id="@+id/profileCard"
         android:layout_width="match_parent"
@@ -30,16 +31,14 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:cardCornerRadius="50dp"
-                >
+                app:cardCornerRadius="50dp">
 
                 <ImageView
                     android:id="@+id/userImage"
                     android:background="#33555C"
                     android:src="@drawable/ic_person"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                   />
+                    android:layout_height="match_parent" />
 
             </androidx.cardview.widget.CardView>
 
@@ -66,12 +65,13 @@
                 android:id="@+id/edit_username"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-               android:background="#DBF5F0"
+                android:background="#DBF5F0"
                 android:src="@drawable/edit_icon"
                 app:layout_constraintBottom_toBottomOf="@+id/username"
                 app:layout_constraintStart_toEndOf="@+id/username" />
 
             <ImageButton
+                android:id="@+id/imgBtn_photoEdit"
                 android:layout_width="24dp"
                 android:layout_height="35dp"
                 android:layout_marginStart="4dp"
@@ -88,8 +88,7 @@
         android:layout_width="match_parent"
         android:layout_height="250dp"
         android:orientation="vertical"
-        android:paddingLeft="30dp"
-        >
+        android:paddingLeft="30dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -97,23 +96,25 @@
             android:orientation="horizontal"
             android:padding="30dp">
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_phone"
-            android:paddingRight="20dp">
-        </ImageView>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_phone"
+                android:paddingRight="20dp"></ImageView>
+
             <TextView
                 android:id="@+id/phone_number"
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
-                android:text=" "/>
+                android:text=" " />
+
             <ImageView
                 android:id="@+id/edit_phone_number"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/edit_icon"/>
-            </LinearLayout>
+                android:clickable="true"
+                android:src="@drawable/edit_icon" />
+        </LinearLayout>
 
 
         <LinearLayout
@@ -126,14 +127,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_mail"
-                android:paddingRight="20dp">
-            </ImageView>
+                android:paddingRight="20dp"></ImageView>
+
             <TextView
                 android:id="@+id/email"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="emaxple@emaxple.com"
-                />
+                android:text="emaxple@emaxple.com" />
         </LinearLayout>
 
         <LinearLayout
@@ -146,18 +146,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_cart"
-                android:paddingRight="20dp"
-                />
+                android:paddingRight="20dp" />
+
             <TextView
                 android:id="@+id/go_cart"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Go to cart"
-                android:paddingRight="80dp"/>
+                android:paddingRight="80dp" />
 
         </LinearLayout>
-
-
 
 
     </LinearLayout>

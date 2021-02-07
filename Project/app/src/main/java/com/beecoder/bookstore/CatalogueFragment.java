@@ -2,7 +2,6 @@ package com.beecoder.bookstore;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,8 +33,7 @@ public class CatalogueFragment extends Fragment implements recyclerAdapterInterf
     }
 
     private void initCategoryList() {
-        Query query = FirebaseFirestore.getInstance()
-                .collection("Category");
+        Query query = FirebaseFirestore.getInstance().collection("Category");
 
         FirestoreRecyclerOptions options = new FirestoreRecyclerOptions.Builder<Category>()
                 .setQuery(query, Category.class)
@@ -43,6 +41,7 @@ public class CatalogueFragment extends Fragment implements recyclerAdapterInterf
 
         adapter = new CategoryAdapter(options);
         categoryListView.setAdapter(adapter);
+        categoryListView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
         adapter.setOnItemClickListener(this::openCategoryItemActivity);
         adapter.startListening();
     }
