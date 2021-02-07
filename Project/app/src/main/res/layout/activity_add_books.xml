@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".AddBookActivity">
+    tools:context=".AddBookActivity"
+    android:background="@drawable/background">
 
     <include layout="@layout/toolbar" />
 
@@ -12,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:padding="70dp">
 
 
         <EditText
@@ -76,22 +77,25 @@
             android:layout_height="wrap_content"
             android:text="Upload Image"
             android:onClick="uploadImage"
+            android:background="@drawable/singupbtn"
             android:id="@+id/btn_upload_img"
-
             android:layout_gravity="center"/>
 
             </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:gravity="center">
 
             <Button
                 android:id="@+id/btn_add"
-                android:layout_width="match_parent"
+                android:layout_width="200dp"
+                android:gravity="center"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:onClick="addBook"
+                android:background="@drawable/loginbtn"
                 android:text="ADD" />
         </LinearLayout>
     </LinearLayout>

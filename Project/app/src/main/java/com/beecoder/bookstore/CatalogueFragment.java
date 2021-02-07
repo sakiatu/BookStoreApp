@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
@@ -18,7 +19,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
-public class CatalogueFragment extends Fragment {
+public class CatalogueFragment extends Fragment implements recyclerAdapterInterface {
     private RecyclerView categoryListView;
 
     private CategoryAdapter adapter;
@@ -73,4 +74,9 @@ public class CatalogueFragment extends Fragment {
     private FirebaseAuth.AuthStateListener authStateListener = firebaseAuth -> {
         if (firebaseAuth.getCurrentUser() != null) initCategoryList();
     };
+
+    @Override
+    public void onItemClick(int position) {
+
+    }
 }

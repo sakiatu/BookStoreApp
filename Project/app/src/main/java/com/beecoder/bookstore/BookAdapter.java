@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -13,16 +14,26 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.firebase.firestore.DocumentSnapshot;
 
 
 public class BookAdapter extends FirestoreRecyclerAdapter<Book, BookAdapter.bookHolder> {
 
     Context context;
 
+    public OnAddToCartClickListener onAddToCartClickListener;
 
-    public BookAdapter(@NonNull FirestoreRecyclerOptions<Book> options, Context context) {
+    public interface OnAddToCartClickListener {
+        void onClick(DocumentSnapshot snapshot);
+    }
+
+    public void setOnAddToCartClickListener(OnAddToCartClickListener onAddToCartClickListener) {
+        this.onAddToCartClickListener = onAddToCartClickListener;
+    }
+
+    public BookAdapter(@NonNull FirestoreRecyclerOptions<Book> options,Context context) {
         super(options);
-        this.context = context;
+       this.context = context;
     }
 
     @Override
@@ -32,6 +43,8 @@ public class BookAdapter extends FirestoreRecyclerAdapter<Book, BookAdapter.book
         holder.edition.setText(book.getEdition());
         holder.price.setText(book.getPrice());
         holder.category.setText(book.getCategory());
+        holder.btn_addCart.setOnClickListener(v -> onAddToCartClickListener.onClick(getSnapshots().getSnapshot(position)));
+
         Glide.with(context)
                 .load(book.getImageUrl())
                 .centerCrop()
@@ -51,6 +64,7 @@ public class BookAdapter extends FirestoreRecyclerAdapter<Book, BookAdapter.book
 
         TextView bookName, authorName, edition, price, category;
         ImageView bookCover;
+        Button btn_addCart;
 
         public bookHolder(@NonNull View itemView) {
             super(itemView);
@@ -60,6 +74,7 @@ public class BookAdapter extends FirestoreRecyclerAdapter<Book, BookAdapter.book
             price = itemView.findViewById(R.id.txt_price);
             category = itemView.findViewById(R.id.txt_category);
             bookCover = itemView.findViewById(R.id.bookCover);
-        }
+            btn_addCart = itemView.findViewById(R.id.btn_addCart);
+            }
     }
 }

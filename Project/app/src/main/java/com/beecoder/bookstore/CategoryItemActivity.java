@@ -1,7 +1,10 @@
 package com.beecoder.bookstore;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -9,10 +12,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
-public class CategoryItemActivity extends AppCompatActivity {
+public class CategoryItemActivity extends AppCompatActivity implements recyclerAdapterInterface {
     private RecyclerView bookRecyclerView;
     private BookAdapter adapter;
     private String category;
@@ -23,15 +27,18 @@ public class CategoryItemActivity extends AppCompatActivity {
         setContentView(R.layout.activity_category_item);
         bookRecyclerView = findViewById(R.id.book_recyclerView);
         category = getIntent().getStringExtra("category");
-
+        Button addCart=findViewById(R.id.btn_addCart);
         setToolbar();
+    }
+
+    private void AddCart() {
+        startActivity(new Intent(this,CartActivity.class));
     }
 
     private void setToolbar() {
         Toolbar toolbar = findViewById(R.id.toolbar);
         TextView title = toolbar.findViewById(R.id.tv_title_toolbar);
         title.setText(category);
-
     }
 
     private void initCategoryList() {
@@ -43,9 +50,21 @@ public class CategoryItemActivity extends AppCompatActivity {
                 .setQuery(query, Book.class)
                 .build();
 
-        adapter = new BookAdapter(options, this);
+        adapter = new BookAdapter(options,this);
+
+       /* GridLayoutManager gridLayoutManager=new GridLayoutManager(this,2);
+        bookRecyclerView.setLayoutManager(gridLayoutManager);*/
         bookRecyclerView.setAdapter(adapter);
+        adapter.setOnAddToCartClickListener(this::onAddToCartButtonClick);
         adapter.startListening();
+    }
+
+    private void onAddToCartButtonClick(DocumentSnapshot snapshot) {
+        Book book = snapshot.toObject(Book.class);
+       //ekhane cart button click korle ei method call hobe
+        
+        AddCart();
+       Toast.makeText(this, "Added in Cart", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -69,4 +88,9 @@ public class CategoryItemActivity extends AppCompatActivity {
     private FirebaseAuth.AuthStateListener authStateListener = firebaseAuth -> {
         if (firebaseAuth.getCurrentUser() != null) initCategoryList();
     };
+
+    @Override
+    public void onItemClick(int position) {
+        Toast.makeText(this,"row"+position,Toast.LENGTH_SHORT).show();
+    }
 }

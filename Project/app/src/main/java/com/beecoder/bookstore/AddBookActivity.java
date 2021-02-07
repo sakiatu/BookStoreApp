@@ -41,7 +41,6 @@ public class AddBookActivity extends AppCompatActivity implements AdapterView.On
     private StorageReference reference;
 
     private Book book = new Book();
-//    private String[] category = {"Math", "Data Structure", "Algorithm", "Story Books"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -153,35 +152,4 @@ public class AddBookActivity extends AppCompatActivity implements AdapterView.On
 
     }
 }
-
-
-       /* if(uri!= null)
-        {
-            StorageReference storageReference = reference.child("image/" + UUID.randomUUID().toString());
-
-            storageReference.putFile(uri).getResult().getUploadSessionUri()
-          // uploadTask.getResult()
-
-           *//* continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
-                @Override
-                public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
-                    if (!task.isSuccessful()) {
-                        throw task.getException();
-                    }
-*//*
-                    // Continue with the task to get the download URL
-                   // return storageReference.getDownloadUrl();
-                }
-            }).addOnCompleteListener(new OnCompleteListener<Uri>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Uri> task) {
-                            if (task.isSuccessful()) {
-                                Uri downloadUri = task.getResult();
-                                filePath= task.getResult().toString();
-                                System.out.println("Successful"+ filePath);
-                            } else {
-
-                            }
-                        }
-                    });*/
 
