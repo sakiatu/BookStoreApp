@@ -1,5 +1,6 @@
 package com.beecoder.bookstore;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -20,29 +21,40 @@ import com.google.firebase.firestore.Query;
 public class HomeFragment extends Fragment {
 
     private RecyclerView bookListView;
+    private BookAdapter adapter;
+    private View layout;
 
-    private CategoryAdapter adapter;
+    Context context;
+
+   // private CategoryAdapter adapter;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View layout = inflater.inflate(R.layout.home_layout, container, false);
+        layout = inflater.inflate(R.layout.home_layout, container, false);
         FloatingActionButton fab = layout.findViewById(R.id.fab);
         fab.setOnClickListener(v -> openAddBookActivity());
-        bookListView=layout.findViewById(R.id.category_recyclerList);
+        initCategoryList();
+        //context = getContext();
         return layout;
     }
 
-    private void initCategoryList()
-    {
+    private void initCategoryList() {
         Query query = FirebaseFirestore.getInstance().collection("Books");
+        bookListView = layout.findViewById(R.id.book_recyclerList);
 
         FirestoreRecyclerOptions options = new FirestoreRecyclerOptions.Builder<Book>()
                 .setQuery(query, Book.class)
                 .build();
 
-        adapter = new CategoryAdapter(options);
+        adapter = new BookAdapter(options,getActivity());
         bookListView.setAdapter(adapter);
     }
+
+    private FirebaseAuth.AuthStateListener authStateListener = firebaseAuth -> {
+        if (firebaseAuth.getCurrentUser() != null)
+            initCategoryList();
+    };
 
     @Override
     public void onStart() {
@@ -61,10 +73,6 @@ public class HomeFragment extends Fragment {
         if (adapter != null)
             adapter.stopListening();
     }
-
-    private FirebaseAuth.AuthStateListener authStateListener = firebaseAuth -> {
-        if (firebaseAuth.getCurrentUser() != null) initCategoryList();
-    };
 
     private void openAddBookActivity() {
         Intent intent = new Intent(getActivity(), AddBookActivity.class);

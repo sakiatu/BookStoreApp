@@ -19,7 +19,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
-public class CatalogueFragment extends Fragment {
+public class CatalogueFragment extends Fragment implements recyclerAdapterInterface {
     private RecyclerView categoryListView;
 
     private CategoryAdapter adapter;
@@ -74,4 +74,9 @@ public class CatalogueFragment extends Fragment {
     private FirebaseAuth.AuthStateListener authStateListener = firebaseAuth -> {
         if (firebaseAuth.getCurrentUser() != null) initCategoryList();
     };
+
+    @Override
+    public void onItemClick(int position) {
+
+    }
 }
