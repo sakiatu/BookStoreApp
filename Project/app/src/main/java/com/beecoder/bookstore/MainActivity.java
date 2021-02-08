@@ -130,7 +130,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 setFragment(new CatalogueFragment());
                 break;
             case R.id.profile_item:
-                setFragment(new ProfileFragment());
+                setFragment(new ProfileFragment(this));
                 break;
             case R.id.logOut_item:
                 AuthUI.getInstance().signOut(MainActivity.this);

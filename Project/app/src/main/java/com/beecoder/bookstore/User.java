@@ -1,7 +1,6 @@
 package com.beecoder.bookstore;
 
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.DocumentReference;
+import android.net.Uri;
 
 class User {
     private String name;

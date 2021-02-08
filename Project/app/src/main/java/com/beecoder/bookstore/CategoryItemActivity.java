@@ -10,8 +10,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.beecoder.bookstore.cart.Cart;
+import com.beecoder.bookstore.database.CartDatabase;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
@@ -20,6 +23,7 @@ public class CategoryItemActivity extends AppCompatActivity implements recyclerA
     private RecyclerView bookRecyclerView;
     private BookAdapter adapter;
     private String category;
+    private CartDatabase cartDb = new CartDatabase();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,9 +35,6 @@ public class CategoryItemActivity extends AppCompatActivity implements recyclerA
         setToolbar();
     }
 
-    private void AddCart() {
-        startActivity(new Intent(this,CartActivity.class));
-    }
 
     private void setToolbar() {
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -52,19 +53,25 @@ public class CategoryItemActivity extends AppCompatActivity implements recyclerA
 
         adapter = new BookAdapter(options,this);
 
-       /* GridLayoutManager gridLayoutManager=new GridLayoutManager(this,2);
-        bookRecyclerView.setLayoutManager(gridLayoutManager);*/
         bookRecyclerView.setAdapter(adapter);
         adapter.setOnAddToCartClickListener(this::onAddToCartButtonClick);
         adapter.startListening();
     }
 
-    private void onAddToCartButtonClick(DocumentSnapshot snapshot) {
+    private void onAddToCartButtonClick(DocumentSnapshot snapshot,Button button) {
         Book book = snapshot.toObject(Book.class);
-       //ekhane cart button click korle ei method call hobe
-        
-        AddCart();
-       Toast.makeText(this, "Added in Cart", Toast.LENGTH_SHORT).show();
+        button.setEnabled(false);
+        cartDb.addToCart(new Cart(snapshot.getId(), FirebaseAuth.getInstance().getUid()))
+        .addOnCompleteListener(task -> {
+            if(!task.isSuccessful()) {
+                button.setEnabled(true);
+                Toast.makeText(this, "Failed to Add Book", Toast.LENGTH_SHORT).show();
+
+            }else {
+
+                Toast.makeText(this, "Added in Cart", Toast.LENGTH_SHORT).show();
+            }});
+
     }
 
     @Override
