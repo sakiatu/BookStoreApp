@@ -19,7 +19,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
-public class CategoryItemActivity extends AppCompatActivity implements recyclerAdapterInterface {
+public class CategoryItemActivity extends AppCompatActivity {
     private RecyclerView bookRecyclerView;
     private BookAdapter adapter;
     private String category;
@@ -95,9 +95,4 @@ public class CategoryItemActivity extends AppCompatActivity implements recyclerA
     private FirebaseAuth.AuthStateListener authStateListener = firebaseAuth -> {
         if (firebaseAuth.getCurrentUser() != null) initCategoryList();
     };
-
-    @Override
-    public void onItemClick(int position) {
-        Toast.makeText(this,"row"+position,Toast.LENGTH_SHORT).show();
-    }
 }

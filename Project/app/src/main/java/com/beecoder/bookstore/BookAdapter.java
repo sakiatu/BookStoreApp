@@ -23,7 +23,7 @@ public class BookAdapter extends FirestoreRecyclerAdapter<Book, BookAdapter.book
     public OnAddToCartClickListener onAddToCartClickListener;
 
     public interface OnAddToCartClickListener {
-        void onClick(DocumentSnapshot snapshot,Button button);
+        void onClick(DocumentSnapshot snapshot, Button button);
     }
 
     public void setOnAddToCartClickListener(OnAddToCartClickListener onAddToCartClickListener) {
@@ -42,8 +42,10 @@ public class BookAdapter extends FirestoreRecyclerAdapter<Book, BookAdapter.book
         holder.edition.setText(book.getEdition());
         holder.price.setText(book.getPrice());
         holder.category.setText(book.getCategory());
-        holder.btn_addCart.setOnClickListener(v -> onAddToCartClickListener.onClick(getSnapshots().getSnapshot(position),holder.btn_addCart));
-
+        holder.btn_addCart.setOnClickListener(v -> onAddToCartClickListener
+                .onClick(
+                        getSnapshots().getSnapshot(position),
+                        holder.btn_addCart));
 
 
         Glide.with(context)
