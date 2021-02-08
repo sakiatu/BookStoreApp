@@ -1,6 +1,5 @@
 package com.beecoder.bookstore;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
@@ -10,11 +9,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.beecoder.bookstore.cart.Cart;
 import com.beecoder.bookstore.database.CartDatabase;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
@@ -31,7 +28,6 @@ public class CategoryItemActivity extends AppCompatActivity {
         setContentView(R.layout.activity_category_item);
         bookRecyclerView = findViewById(R.id.book_recyclerView);
         category = getIntent().getStringExtra("category");
-        Button addCart=findViewById(R.id.btn_addCart);
         setToolbar();
     }
 
@@ -51,26 +47,21 @@ public class CategoryItemActivity extends AppCompatActivity {
                 .setQuery(query, Book.class)
                 .build();
 
-        adapter = new BookAdapter(options,this);
+        adapter = new BookAdapter(options, this);
 
         bookRecyclerView.setAdapter(adapter);
         adapter.setOnAddToCartClickListener(this::onAddToCartButtonClick);
         adapter.startListening();
     }
 
-    private void onAddToCartButtonClick(DocumentSnapshot snapshot,Button button) {
-        Book book = snapshot.toObject(Book.class);
-        button.setEnabled(false);
-        cartDb.addToCart(new Cart(snapshot.getId(), FirebaseAuth.getInstance().getUid()))
-        .addOnCompleteListener(task -> {
-            if(!task.isSuccessful()) {
-                button.setEnabled(true);
-                Toast.makeText(this, "Failed to Add Book", Toast.LENGTH_SHORT).show();
-
-            }else {
-
-                Toast.makeText(this, "Added in Cart", Toast.LENGTH_SHORT).show();
-            }});
+    private void onAddToCartButtonClick(DocumentSnapshot snapshot) {
+        cartDb.addToCart(snapshot.getId())
+                .addOnCompleteListener(task -> {
+                    if (!task.isSuccessful())
+                        Toast.makeText(this, "Failed to Add Book", Toast.LENGTH_SHORT).show();
+                    else
+                        Toast.makeText(this, "Added in Cart", Toast.LENGTH_SHORT).show();
+                });
 
     }
 

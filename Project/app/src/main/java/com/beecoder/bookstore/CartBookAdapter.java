@@ -11,27 +11,26 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.beecoder.bookstore.cart.Carts;
 import com.bumptech.glide.Glide;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 
-public class BookAdapter extends FirestoreRecyclerAdapter<Book, BookAdapter.bookHolder> {
+public class CartBookAdapter extends FirestoreRecyclerAdapter<Book, CartBookAdapter.bookHolder> {
 
     private Context context;
     public OnAddToCartClickListener onAddToCartClickListener;
 
     public interface OnAddToCartClickListener {
-        void onClick(DocumentSnapshot snapshot);
+        void onClick(DocumentSnapshot snapshot, int position);
     }
 
-    public void setOnAddToCartClickListener(OnAddToCartClickListener onAddToCartClickListener) {
+    public void setOnCancelClickListener(OnAddToCartClickListener onAddToCartClickListener) {
         this.onAddToCartClickListener = onAddToCartClickListener;
     }
 
-    public BookAdapter(@NonNull FirestoreRecyclerOptions<Book> options, Context context) {
+    public CartBookAdapter(@NonNull FirestoreRecyclerOptions<Book> options, Context context) {
         super(options);
         this.context = context;
     }
@@ -43,9 +42,9 @@ public class BookAdapter extends FirestoreRecyclerAdapter<Book, BookAdapter.book
         holder.edition.setText(book.getEdition());
         holder.price.setText(book.getPrice());
         holder.category.setText(book.getCategory());
-        holder.btn_addCart.setEnabled(!Carts.hasAddedToCart(getSnapshots().getSnapshot(position).getId()));
+        holder.btn_addCart.setText("Remove From Cart");
         holder.btn_addCart.setOnClickListener(v ->
-                onAddToCartClickListener.onClick(getSnapshots().getSnapshot(position)));
+                onAddToCartClickListener.onClick(getSnapshots().getSnapshot(position), position));
         Glide.with(context)
                 .load(book.getImageUrl())
                 .centerCrop()

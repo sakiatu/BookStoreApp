@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -13,7 +12,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.beecoder.bookstore.cart.Cart;
+import com.beecoder.bookstore.cart.Carts;
 import com.beecoder.bookstore.database.CartDatabase;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -23,10 +22,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
 public class HomeFragment extends Fragment {
-
     private RecyclerView bookListView;
     private BookAdapter adapter;
-
     private CartDatabase cartDb = new CartDatabase();
 
     @Nullable
@@ -42,6 +39,7 @@ public class HomeFragment extends Fragment {
     private void initBookList() {
         Query query = FirebaseFirestore.getInstance().collection("Books");
 
+
         FirestoreRecyclerOptions options = new FirestoreRecyclerOptions.Builder<Book>()
                 .setQuery(query, Book.class)
                 .build();
@@ -49,19 +47,25 @@ public class HomeFragment extends Fragment {
         bookListView.setAdapter(adapter);
         adapter.setOnAddToCartClickListener(this::addToCart);
         adapter.startListening();
+        CartDatabase cartDatabase = new CartDatabase();
+        cartDatabase.getBookIds().addSnapshotListener((value, error) -> {
+            if (!value.isEmpty()) {
+                Carts.clearAll();
+                for (DocumentSnapshot snapshot : value.getDocuments())
+                    Carts.addBookId(snapshot.getId());
+                adapter.notifyDataSetChanged();
+            }
+        });
     }
 
-    private void addToCart(DocumentSnapshot snapshot, Button button) {
-        button.setEnabled(false);
-        cartDb.addToCart(new Cart(snapshot.getId(), FirebaseAuth.getInstance().getUid()))
+    private void addToCart(DocumentSnapshot snapshot) {
+        cartDb.addToCart(snapshot.getId())
                 .addOnCompleteListener(task -> {
                     if (!task.isSuccessful()) {
-                        button.setEnabled(true);
+                        Carts.addBookId(snapshot.getId());
                         Toast.makeText(getActivity(), "Failed to Add Book", Toast.LENGTH_SHORT).show();
-                    } else {
-
+                    } else
                         Toast.makeText(getActivity(), "Added in Cart", Toast.LENGTH_SHORT).show();
-                    }
                 });
         adapter.notifyDataSetChanged();
     }
