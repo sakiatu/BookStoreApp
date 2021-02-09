@@ -37,7 +37,8 @@ public class CartBookAdapter extends FirestoreRecyclerAdapter<Book, CartBookAdap
 
     @Override
     protected void onBindViewHolder(@NonNull bookHolder holder, int position, @NonNull Book book) {
-        holder.bookName.setText(book.getTitle());
+        if (book.isSold()) holder.bookName.setText(book.getTitle() + " (Not Available)");
+        else holder.bookName.setText(book.getTitle());
         holder.authorName.setText(book.getAuthorName());
         holder.edition.setText(book.getEdition());
         holder.price.setText(book.getPrice());

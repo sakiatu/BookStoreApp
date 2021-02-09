@@ -20,7 +20,7 @@ public class CartDatabase {
     }
 
     public Query getBookIds() {
-        return bookRef.whereArrayContains(field_cart, userId);
+        return bookRef.whereArrayContains(field_cart, userId).whereEqualTo("approved", true);
     }
 
     public Task<Void> removeBook(String id) {

@@ -1,7 +1,6 @@
 package com.beecoder.bookstore;
 
 import android.os.Bundle;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,7 +40,9 @@ public class CategoryItemActivity extends AppCompatActivity {
     private void initCategoryList() {
         Query query = FirebaseFirestore.getInstance()
                 .collection("Books")
-                .whereEqualTo("category", category);
+                .whereEqualTo("category", category)
+                .whereEqualTo("approved", true)
+                .whereEqualTo("sold", false);
 
         FirestoreRecyclerOptions options = new FirestoreRecyclerOptions.Builder<Book>()
                 .setQuery(query, Book.class)

@@ -46,7 +46,9 @@ public class HomeFragment extends Fragment implements SearchView.OnQueryTextList
     }
 
     private void initBookList() {
-        Query query = FirebaseFirestore.getInstance().collection("Books");
+        Query query = FirebaseFirestore.getInstance().collection("Books")
+                .whereEqualTo("approved", true)
+                .whereEqualTo("sold", false);
 
         FirestoreRecyclerOptions options = new FirestoreRecyclerOptions.Builder<Book>()
                 .setQuery(query, Book.class)
