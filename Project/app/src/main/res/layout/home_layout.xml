@@ -35,7 +35,7 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="36dp"
-        android:background="@android:color/holo_blue_light"
+        android:background="@color/colorPrimary"
         android:src="@drawable/ic_add" />
 
 </RelativeLayout>

@@ -21,6 +21,7 @@ import com.beecoder.bookstore.fragmentsMain.CatalogueFragment;
 import com.beecoder.bookstore.fragmentsMain.ContactFragment;
 import com.beecoder.bookstore.fragmentsMain.HomeFragment;
 import com.beecoder.bookstore.fragmentsMain.ProfileFragment;
+import com.bumptech.glide.Glide;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -88,10 +89,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         TextView username = headerView.findViewById(R.id.username);
         TextView email = headerView.findViewById(R.id.email);
         ImageView img_dp = headerView.findViewById(R.id.dp);
-        /*Glide.with(this)
+        Glide.with(this)
                 .load(CurrentUser.getCurrentUser().getPhotoUrl())
                 .circleCrop()
-                .into(img_dp);*/
+                .into(img_dp);
         username.setText(currentUser.getDisplayName());
         email.setText(currentUser.getEmail());
     }

@@ -4,19 +4,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/profile"
     android:orientation="vertical">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="230dp"
+        android:background="@drawable/profileborad">
 
         <androidx.cardview.widget.CardView
             android:id="@+id/userIcon"
-            android:layout_width="96dp"
-            android:layout_height="96dp"
-            android:layout_marginTop="24dp"
-            app:cardCornerRadius="50dp"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_marginTop="34dp"
+
+            app:cardCornerRadius="70dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -25,8 +26,9 @@
                 android:id="@+id/img_userProfile"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="#33555C"
-                android:src="@drawable/ic_person" />
+                android:background="@color/colorPrimary"
+                android:src="@drawable/ic_person"
+                />
         </androidx.cardview.widget.CardView>
 
         <ImageButton
@@ -34,7 +36,7 @@
             android:layout_width="24dp"
             android:layout_height="35dp"
             android:layout_marginStart="4dp"
-            android:background="#DBF5F0"
+            android:background="@color/colorPrimary"
             android:src="@drawable/edit_icon"
             app:layout_constraintBottom_toBottomOf="@+id/userIcon"
             app:layout_constraintStart_toEndOf="@+id/userIcon" />
@@ -65,7 +67,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:paddingLeft="30dp"
-        android:paddingTop="10dp">
+        android:paddingTop="50dp">
 
         <LinearLayout
             android:layout_width="match_parent"
