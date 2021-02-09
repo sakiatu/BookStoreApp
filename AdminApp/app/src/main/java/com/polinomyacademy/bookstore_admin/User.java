@@ -1,6 +1,4 @@
-package com.beecoder.bookstore;
-
-import android.net.Uri;
+package com.polinomyacademy.bookstore_admin;
 
 public class User {
     private String name;

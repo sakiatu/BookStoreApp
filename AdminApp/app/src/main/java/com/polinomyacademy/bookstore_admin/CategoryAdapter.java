@@ -10,18 +10,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.google.firebase.firestore.DocumentSnapshot;
 
 public class CategoryAdapter extends FirestoreRecyclerAdapter<Category, CategoryAdapter.CategoryViewHolder> {
-    private OnItemClickListener onItemClickListener;
-
-    public interface OnItemClickListener {
-        void onClick(DocumentSnapshot snapshot);
-    }
-
-    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
-        this.onItemClickListener = onItemClickListener;
-    }
 
     public CategoryAdapter(FirestoreRecyclerOptions<Category> options) {
         super(options);
@@ -34,8 +24,6 @@ public class CategoryAdapter extends FirestoreRecyclerAdapter<Category, Category
         public CategoryViewHolder(View itemView) {
             super(itemView);
             title = itemView.findViewById(R.id.category_name_tv);
-
-            itemView.setOnClickListener(v -> onItemClickListener.onClick(getSnapshots().getSnapshot(getAdapterPosition())));
         }
     }
 

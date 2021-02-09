@@ -2,6 +2,8 @@ package com.polinomyacademy.bookstore_admin;
 
 public class Book {
 
+    private String id;
+
     private String title;
     private String authorName;
     private String edition;
@@ -9,8 +11,25 @@ public class Book {
     private String category;
     private String imageUrl;
     private String sellerId;
+    private boolean isBooked;
     private boolean isApproved;
     private boolean isSold;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public boolean isBooked() {
+        return isBooked;
+    }
+
+    public void setBooked(boolean booked) {
+        isBooked = booked;
+    }
 
     public void setApproved(boolean approved) {
         isApproved = approved;

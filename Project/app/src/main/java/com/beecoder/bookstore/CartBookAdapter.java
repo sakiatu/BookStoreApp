@@ -21,9 +21,18 @@ public class CartBookAdapter extends FirestoreRecyclerAdapter<Book, CartBookAdap
 
     private Context context;
     public OnAddToCartClickListener onAddToCartClickListener;
+    public OnDataSetChangeListener onDataSetChangeListener;
 
     public interface OnAddToCartClickListener {
         void onClick(DocumentSnapshot snapshot, int position);
+    }
+
+    public interface OnDataSetChangeListener {
+        void onChange(int count);
+    }
+
+    public void setOnDataSetChangeListener(OnDataSetChangeListener onDataSetChangeListener) {
+        this.onDataSetChangeListener = onDataSetChangeListener;
     }
 
     public void setOnCancelClickListener(OnAddToCartClickListener onAddToCartClickListener) {
@@ -75,5 +84,11 @@ public class CartBookAdapter extends FirestoreRecyclerAdapter<Book, CartBookAdap
             bookCover = itemView.findViewById(R.id.bookCover);
             btn_addCart = itemView.findViewById(R.id.btn_addCart);
         }
+    }
+
+    @Override
+    public void onDataChanged() {
+        super.onDataChanged();
+        onDataSetChangeListener.onChange(getItemCount());
     }
 }

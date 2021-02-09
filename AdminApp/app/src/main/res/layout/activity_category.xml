@@ -7,12 +7,15 @@
     android:orientation="vertical"
     tools:context=".CategoryActivity">
 
+    <include layout="@layout/toolbar" />
+
     <Button
         android:id="@+id/btn_addCategory"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="4dp"
         android:text="Add Category" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/categoryListView"
         android:layout_width="match_parent"

@@ -9,6 +9,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -17,6 +19,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -32,7 +35,8 @@ public class AddBookActivity extends AppCompatActivity implements AdapterView.On
     private EditText title_edt, author_edt, edition_edt, price_edt;
     private Button btn;
     private Spinner spinner;
-    private Button btnUpload;
+    private ProgressBar progressBar;
+    private ImageButton imageButton;
 
     private Uri uri;
     private String filePath;
@@ -51,9 +55,11 @@ public class AddBookActivity extends AppCompatActivity implements AdapterView.On
         author_edt = findViewById(R.id.edit_txt_author);
         edition_edt = findViewById(R.id.edit_txt_edition);
         price_edt = findViewById(R.id.edit_txt_price);
+        progressBar = findViewById(R.id.progressBar);
+        progressBar.setVisibility(View.GONE);
 
         btn = findViewById(R.id.btn_add);
-        btnUpload = findViewById(R.id.btn_upload_img);
+        imageButton = findViewById(R.id.btn_upload_img);
 
         storage = FirebaseStorage.getInstance();
         reference = storage.getReference();
@@ -123,16 +129,17 @@ public class AddBookActivity extends AppCompatActivity implements AdapterView.On
 
         if (requestCode == IMG_REQUEST_ID && resultCode == RESULT_OK && data != null && data.getData() != null) {
             uri = data.getData();
+            Glide.with(this)
+                    .load(uri)
+                    .centerCrop()
+                    .into(imageButton);
         }
     }
 
 
     public void saveImage() {
-        /*ProgressDialog progressDialog
-                = new ProgressDialog(this);
-        progressDialog.setTitle("Uploading...");
-        progressDialog.show();*/
-
+        progressBar.setVisibility(View.VISIBLE);
+        btn.setEnabled(false);
         reference = storage.getReference().child("News").child(uri.hashCode() + "");
         reference.putFile(uri)
                 .addOnSuccessListener(s -> {
@@ -144,10 +151,16 @@ public class AddBookActivity extends AppCompatActivity implements AdapterView.On
 
                                 firestore.collection("Books").add(book)
                                         .addOnSuccessListener(documentReference -> {
+                                            btn.setEnabled(true);
+                                            progressBar.setVisibility(View.GONE);
                                             Toast.makeText(this, "request sent to admin...", Toast.LENGTH_SHORT).show();
                                             finish();
                                         })
-                                        .addOnFailureListener(e -> Log.d(TAG, "Failed"));
+                                        .addOnFailureListener(e -> {
+                                            btn.setEnabled(true);
+                                            progressBar.setVisibility(View.GONE);
+                                            Log.d(TAG, "Failed");
+                                        });
                             });
                 });
 

@@ -10,10 +10,22 @@ public class Book {
     private String imageUrl;
     private String sellerId;
     private boolean isApproved;
+    private boolean isBooked;
     private boolean isSold;
 
     public Book() {
         isApproved = false;
+        isBooked = false;
+        isSold = false;
+    }
+
+
+    public boolean isBooked() {
+        return isBooked;
+    }
+
+    public void setBooked(boolean booked) {
+        isBooked = booked;
     }
 
     public boolean isApproved() {

@@ -20,14 +20,14 @@ import com.google.firebase.firestore.DocumentSnapshot;
 public class BookAdapter extends FirestoreRecyclerAdapter<Book, BookAdapter.bookHolder> {
 
     private Context context;
-    public OnAddToCartClickListener onAddToCartClickListener;
+    public OnAddToCartClickListener onApproveClickListener;
 
     public interface OnAddToCartClickListener {
         void onClick(DocumentSnapshot snapshot);
     }
 
-    public void setOnAddToCartClickListener(OnAddToCartClickListener onAddToCartClickListener) {
-        this.onAddToCartClickListener = onAddToCartClickListener;
+    public void setOnApproveClickListener(OnAddToCartClickListener onApproveClickListener) {
+        this.onApproveClickListener = onApproveClickListener;
     }
 
     public BookAdapter(@NonNull FirestoreRecyclerOptions<Book> options, Context context) {
@@ -42,8 +42,9 @@ public class BookAdapter extends FirestoreRecyclerAdapter<Book, BookAdapter.book
         holder.edition.setText(book.getEdition());
         holder.price.setText(book.getPrice());
         holder.category.setText(book.getCategory());
+        holder.btn_approved.setText("Approve");
         holder.btn_approved.setOnClickListener(v ->
-                onAddToCartClickListener.onClick(getSnapshots().getSnapshot(position)));
+                onApproveClickListener.onClick(getSnapshots().getSnapshot(position)));
         Glide.with(context)
                 .load(book.getImageUrl())
                 .centerCrop()
@@ -71,7 +72,7 @@ public class BookAdapter extends FirestoreRecyclerAdapter<Book, BookAdapter.book
             price = itemView.findViewById(R.id.txt_price);
             category = itemView.findViewById(R.id.txt_category);
             bookCover = itemView.findViewById(R.id.bookCover);
-            btn_approved = itemView.findViewById(R.id.btn_addCart);
+            btn_approved = itemView.findViewById(R.id.btn_approve);
         }
     }
 }

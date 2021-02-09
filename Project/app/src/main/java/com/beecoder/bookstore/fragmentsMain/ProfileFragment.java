@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,6 +52,8 @@ public class ProfileFragment extends Fragment {
         editPhone_iv.setOnClickListener(view -> showEditPhoneDialogue());
 
         if (CurrentUser.getCurrentUser() != null) {
+            Toast.makeText(getActivity(), "asi eikhane", Toast.LENGTH_SHORT).show();
+            Log.i("1234567890", "setViews: " + CurrentUser.getCurrentUser().toString());
             email.setText(CurrentUser.getCurrentUser().getEmail());
             username.setText(CurrentUser.getCurrentUser().getName());
             phoneNumber_tv.setText(CurrentUser.getCurrentUser().getPhoneNumber());

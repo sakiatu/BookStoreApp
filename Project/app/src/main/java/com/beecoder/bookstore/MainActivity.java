@@ -2,6 +2,7 @@ package com.beecoder.bookstore;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -28,38 +29,46 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-    private FirebaseUser currentUser;
+    private FirebaseUser user;
     private DrawerLayout drawerLayout;
     private Toolbar toolbar;
     private NavigationView navigationView;
+    public ImageView dp_iv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        user = FirebaseAuth.getInstance().getCurrentUser();
 
-        if (this.currentUser ==null) {
+        if (user == null) {
             openAuthActivity();
             finish();
         } else {
-            setUserValues();
             setupToolbar();
             setUpNavigationDrawer(savedInstanceState);
+            setUserValues();
         }
     }
 
     private void setUserValues() {
-        CurrentUser.setCurrentUser(new User());
+        Log.i("1234567890", "setUserValues:1 " + CurrentUser.getCurrentUser().toString());
         CurrentUser.getCurrentUser().setName(user.getDisplayName());
         CurrentUser.getCurrentUser().setEmail(user.getEmail());
-        CurrentUser.getUserDoc()
+        CurrentUser.getUserCollection()
+                .document(user.getUid())
                 .get().addOnSuccessListener(snapshot -> {
             if (snapshot.exists()) {
                 User currentUser = snapshot.toObject(User.class);
                 CurrentUser.getCurrentUser().setPhoneNumber(currentUser.getPhoneNumber());
                 CurrentUser.getCurrentUser().setPhotoUrl(currentUser.getPhotoUrl());
+                CurrentUser.getCurrentUser().setId(user.getUid());
+                Glide.with(this).load(CurrentUser.getCurrentUser().getPhotoUrl())
+                        .circleCrop()
+                        .into(dp_iv);
             }
+
+            Log.i("1234567890", "setUserValues:2 " + CurrentUser.getCurrentUser().toString());
         });
     }
 
@@ -89,13 +98,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         View headerView = navigationView.getHeaderView(0);
         TextView username = headerView.findViewById(R.id.username);
         TextView email = headerView.findViewById(R.id.email);
-        ImageView img_dp = headerView.findViewById(R.id.dp);
-        Glide.with(this)
-                .load(CurrentUser.getCurrentUser().getPhotoUrl())
-                .circleCrop()
-                .into(img_dp);
-        username.setText(currentUser.getDisplayName());
-        email.setText(currentUser.getEmail());
+        dp_iv = headerView.findViewById(R.id.dp);
+        username.setText(user.getDisplayName());
+        email.setText(user.getEmail());
     }
 
     @Override
@@ -128,10 +133,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 setFragment(new ContactFragment());
                 break;
             case R.id.logOut_item:
-                AuthUI.getInstance().signOut(MainActivity.this);
-                CurrentUser.setCurrentUser(null);
-                startActivity(new Intent(MainActivity.this, AuthActivity.class));
-                CurrentUser.setCurrentUser(null);
+                CurrentUser.clearInfo();
+                Log.i("1234567890", "onNavigationItemSelected: " + CurrentUser.getCurrentUser().toString());
+                AuthUI.getInstance().signOut(this);
+                FirebaseAuth.getInstance().signOut();
+                startActivity(new Intent(this, AuthActivity.class));
                 finish();
         }
         drawerLayout.closeDrawer(GravityCompat.START);

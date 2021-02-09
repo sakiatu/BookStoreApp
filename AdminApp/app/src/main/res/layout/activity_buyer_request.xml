@@ -4,10 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#EFEFEF"
     android:orientation="vertical"
-    tools:context=".BuyerActivity">
-
+    tools:context=".BuyerRequestActivity">
 
     <include layout="@layout/toolbar" />
 
@@ -16,5 +14,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:listitem="@layout/user_row" />
+        tools:listitem="@layout/book_item" />
+
 </LinearLayout>
