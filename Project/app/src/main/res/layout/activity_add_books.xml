@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".AddBookActivity"
-    android:background="@drawable/background">
+    android:background="@drawable/addbook">
 
     <include layout="@layout/toolbar" />
 
@@ -77,7 +77,7 @@
             android:layout_height="wrap_content"
             android:text="Upload Image"
             android:onClick="uploadImage"
-            android:background="@drawable/singupbtn"
+            android:background="@drawable/borderbtn"
             android:id="@+id/btn_upload_img"
             android:layout_gravity="center"/>
 
@@ -95,7 +95,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:onClick="addBook"
-                android:background="@drawable/loginbtn"
+                android:background="@drawable/grennbtn"
                 android:text="ADD" />
         </LinearLayout>
     </LinearLayout>

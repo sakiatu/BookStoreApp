@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -20,13 +21,14 @@ import com.beecoder.bookstore.fragmentsMain.CatalogueFragment;
 import com.beecoder.bookstore.fragmentsMain.ContactFragment;
 import com.beecoder.bookstore.fragmentsMain.HomeFragment;
 import com.beecoder.bookstore.fragmentsMain.ProfileFragment;
+import com.bumptech.glide.Glide;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-    private FirebaseUser user;
+    private FirebaseUser currentUser;
     private DrawerLayout drawerLayout;
     private Toolbar toolbar;
     private NavigationView navigationView;
@@ -35,9 +37,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        user = FirebaseAuth.getInstance().getCurrentUser();
+        currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
-        if (user == null) {
+        if (this.currentUser ==null) {
             openAuthActivity();
             finish();
         } else {
@@ -87,8 +89,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         View headerView = navigationView.getHeaderView(0);
         TextView username = headerView.findViewById(R.id.username);
         TextView email = headerView.findViewById(R.id.email);
-        username.setText(user.getDisplayName());
-        email.setText(user.getEmail());
+        ImageView img_dp = headerView.findViewById(R.id.dp);
+        Glide.with(this)
+                .load(CurrentUser.getCurrentUser().getPhotoUrl())
+                .circleCrop()
+                .into(img_dp);
+        username.setText(currentUser.getDisplayName());
+        email.setText(currentUser.getEmail());
     }
 
     @Override
@@ -122,6 +129,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.logOut_item:
                 AuthUI.getInstance().signOut(MainActivity.this);
+                CurrentUser.setCurrentUser(null);
                 startActivity(new Intent(MainActivity.this, AuthActivity.class));
                 CurrentUser.setCurrentUser(null);
                 finish();

@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fragmentsMain.ContactFragment"
+    android:background="@drawable/addbook"
     android:orientation="vertical">
 
     <LinearLayout
@@ -19,6 +20,7 @@
             android:layout_height="wrap_content"
             android:text="Admin Contact List:"
             android:textSize="16sp"
+            android:textColor="@color/colorPrimary"
             android:textStyle="bold" />
 
     </LinearLayout>
@@ -33,6 +35,12 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:padding="30dp">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_admin"
+                android:paddingRight="30dp"/>
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -54,6 +62,11 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:padding="30dp">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_admin"
+                android:paddingRight="30dp"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -75,6 +88,11 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:padding="30dp">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_admin"
+                android:paddingRight="30dp"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
