@@ -1,4 +1,4 @@
-package com.beecoder.bookstore;
+package com.polinomyacademy.bookstore_admin;
 
 public class Book {
 
@@ -11,6 +11,14 @@ public class Book {
     private String sellerId;
     private boolean isApproved;
     private boolean isSold;
+
+    public void setApproved(boolean approved) {
+        isApproved = approved;
+    }
+
+    public void setSold(boolean sold) {
+        isSold = sold;
+    }
 
     public Book() {
         isApproved = false;

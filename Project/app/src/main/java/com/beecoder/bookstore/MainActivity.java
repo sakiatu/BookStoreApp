@@ -48,12 +48,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void setUserValues() {
+        CurrentUser.setCurrentUser(new User());
+        CurrentUser.getCurrentUser().setName(user.getDisplayName());
+        CurrentUser.getCurrentUser().setEmail(user.getEmail());
         CurrentUser.getUserDoc()
                 .get().addOnSuccessListener(snapshot -> {
             if (snapshot.exists()) {
                 User currentUser = snapshot.toObject(User.class);
-                CurrentUser.getCurrentUser().setName(user.getDisplayName());
-                CurrentUser.getCurrentUser().setEmail(user.getEmail());
                 CurrentUser.getCurrentUser().setPhoneNumber(currentUser.getPhoneNumber());
                 CurrentUser.getCurrentUser().setPhotoUrl(currentUser.getPhotoUrl());
             }
@@ -90,27 +91,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         email.setText(user.getEmail());
     }
 
-    /* private void openSellingActivity() {
-         Intent intent = new Intent(this, SellingActivity.class);
-         startActivity(intent);
-     }
-
-     @Override
-     public boolean onPrepareOptionsMenu(Menu menu) {
-         getMenuInflater().inflate(R.menu.main_menu, menu);
-         return super.onPrepareOptionsMenu(menu);
-     }
-
-     @Override
-     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-         switch (item.getItemId()) {
-             case R.id.action_sell:
-                 openSellingActivity();
-                 break;
-         }
-         return true;
-     }
- */
     @Override
     public void onBackPressed() {
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
@@ -143,6 +123,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.logOut_item:
                 AuthUI.getInstance().signOut(MainActivity.this);
                 startActivity(new Intent(MainActivity.this, AuthActivity.class));
+                CurrentUser.setCurrentUser(null);
                 finish();
         }
         drawerLayout.closeDrawer(GravityCompat.START);
