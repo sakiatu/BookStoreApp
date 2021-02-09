@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -21,24 +22,27 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements SearchView.OnQueryTextListener, androidx.appcompat.widget.SearchView.OnQueryTextListener {
     private RecyclerView bookListView;
     private BookAdapter adapter;
     private CartDatabase cartDb = new CartDatabase();
+    private androidx.appcompat.widget.SearchView search_bar;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View layout = inflater.inflate(R.layout.home_layout, container, false);
         FloatingActionButton fab = layout.findViewById(R.id.fab);
+        search_bar=layout.findViewById(R.id.search_bar);
         fab.setOnClickListener(v -> openAddBookActivity());
+        search_bar.setOnQueryTextListener(this);
+
         bookListView = layout.findViewById(R.id.book_recyclerList);
         return layout;
     }
 
     private void initBookList() {
         Query query = FirebaseFirestore.getInstance().collection("Books");
-
 
         FirestoreRecyclerOptions options = new FirestoreRecyclerOptions.Builder<Book>()
                 .setQuery(query, Book.class)
@@ -96,5 +100,31 @@ public class HomeFragment extends Fragment {
     private void openAddBookActivity() {
         Intent intent = new Intent(getActivity(), AddBookActivity.class);
         startActivity(intent);
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String s) {
+        searchBook(s);
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String s) {
+        searchBook(s);
+        return false;
+    }
+
+    private void searchBook(String bookName)
+    {
+        Query query = FirebaseFirestore.getInstance().collection("Books").orderBy("title").startAt(bookName).endAt(bookName+"\uf8ff");
+
+
+        FirestoreRecyclerOptions options = new FirestoreRecyclerOptions.Builder<Book>()
+                .setQuery(query, Book.class)
+                .build();
+
+        adapter = new BookAdapter(options, getActivity());
+        bookListView.setAdapter(adapter);
+        adapter.startListening();
     }
 }

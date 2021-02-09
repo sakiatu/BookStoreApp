@@ -3,6 +3,7 @@ package com.beecoder.bookstore;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,23 +20,29 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.beecoder.bookstore.cart.CartActivity;
 import com.bumptech.glide.Glide;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import static android.app.Activity.RESULT_OK;
+import static android.content.Context.MODE_PRIVATE;
 
 public class ProfileFragment extends Fragment {
     private final int IMG_REQUEST_ID=10;
 
     private TextView username, phoneNumber_tv,email;
-    private ImageView editPhone, imgBtn_photoEdit,img_userProfile;
+    private ImageView editPhone, imgBtn_photoEdit,img_userProfile,imgBtn_cart;
     private Button btn_uploadProfileImg;
     private Uri uri;
     private Context context;
+    FirebaseUser user;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View layout = inflater.inflate(R.layout.profile_layout, container, false);
+        user=FirebaseAuth.getInstance().getCurrentUser();
         setViews(layout);
         return layout;
     }
@@ -53,11 +60,14 @@ public class ProfileFragment extends Fragment {
         img_userProfile=layout.findViewById(R.id.img_userProfile);
         imgBtn_photoEdit = layout.findViewById(R.id.imgBtn_photoEdit);
         btn_uploadProfileImg=layout.findViewById(R.id.btn_uploadProfileImg);
+        imgBtn_cart=layout.findViewById(R.id.imgBtn_cart);
         editPhone.setOnClickListener(view -> showEditPhoneDialogue());
-        if (CurrentUser.getCurrentUser() != null) {
+        imgBtn_cart.setOnClickListener(view -> openCart());
+        if (CurrentUser.getCurrentUser() != null && CurrentUser.getCurrentUser().getId().equals(user.getUid())) {
             email.setText(CurrentUser.getCurrentUser().getEmail());
             username.setText(CurrentUser.getCurrentUser().getName());
             phoneNumber_tv.setText(CurrentUser.getCurrentUser().getPhoneNumber());
+            img_userProfile.setImageURI(uri);
         }
         imgBtn_photoEdit.setOnClickListener(v -> openGallery());
         btn_uploadProfileImg.setOnClickListener(view -> uploadImage());
@@ -68,24 +78,23 @@ public class ProfileFragment extends Fragment {
 
     }
 
+    private void openCart() {
+        startActivity(new Intent(getActivity(),CartActivity.class));
+    }
+
     private void openGallery() {
 
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(intent.ACTION_GET_CONTENT);
         startActivityForResult(intent.createChooser(intent, "Selected Image"), IMG_REQUEST_ID);
-        //open gallery
-        //choose photo
-        //size komabi
-        //upload photo to storage and get url
-        // set url(User.setPhotoUrl(url))
     } @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == IMG_REQUEST_ID && resultCode == RESULT_OK && data != null && data.getData() != null) {
             uri = data.getData();
-            Toast.makeText(getActivity(), "Image Selected", Toast.LENGTH_SHORT).show();
+            img_userProfile.setImageURI(uri);
         }
     }
     private void uploadImage()

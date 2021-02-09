@@ -45,16 +45,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void setUserValues() {
+        CurrentUser.getCurrentUser().setName(user.getDisplayName());
+        CurrentUser.getCurrentUser().setEmail(user.getEmail());
+        CurrentUser.getCurrentUser().setId(user.getUid());
         CurrentUser.getUserDoc()
                 .get().addOnSuccessListener(snapshot -> {
-            if (snapshot.exists()) {
+            if (snapshot.exists() && CurrentUser.getCurrentUser().getId().equals(user.getUid())) {
                 User currentUser = snapshot.toObject(User.class);
-                CurrentUser.getCurrentUser().setName(user.getDisplayName());
-                CurrentUser.getCurrentUser().setEmail(user.getEmail());
                 CurrentUser.getCurrentUser().setPhoneNumber(currentUser.getPhoneNumber());
                 CurrentUser.getCurrentUser().setPhotoUrl(currentUser.getPhotoUrl());
 
-                Toast.makeText(this, "Asi mamah", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this, "Asi mamah", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -89,27 +90,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         email.setText(user.getEmail());
     }
 
-    /* private void openSellingActivity() {
-         Intent intent = new Intent(this, SellingActivity.class);
-         startActivity(intent);
-     }
-
-     @Override
-     public boolean onPrepareOptionsMenu(Menu menu) {
-         getMenuInflater().inflate(R.menu.main_menu, menu);
-         return super.onPrepareOptionsMenu(menu);
-     }
-
-     @Override
-     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-         switch (item.getItemId()) {
-             case R.id.action_sell:
-                 openSellingActivity();
-                 break;
-         }
-         return true;
-     }
- */
     @Override
     public void onBackPressed() {
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
@@ -132,6 +112,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.profile_item:
                 setFragment(new ProfileFragment(this));
+                break;
+            case R.id.cart_item:
+                startActivity(new Intent(this,CartActivity.class));
+                break;
+            case R.id.contact_item:
+                setFragment(new ContactFragment());
                 break;
             case R.id.logOut_item:
                 AuthUI.getInstance().signOut(MainActivity.this);

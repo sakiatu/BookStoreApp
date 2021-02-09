@@ -21,7 +21,6 @@ public class CurrentUser {
     public static void setCurrentUser(User currentUser) {
         CurrentUser.currentUser = currentUser;
     }
-
     public static DocumentReference getUserDoc() {
         return userDoc;
     }
