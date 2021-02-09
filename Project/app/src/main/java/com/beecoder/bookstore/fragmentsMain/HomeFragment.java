@@ -1,4 +1,4 @@
-package com.beecoder.bookstore;
+package com.beecoder.bookstore.fragmentsMain;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,6 +13,10 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.beecoder.bookstore.AddBookActivity;
+import com.beecoder.bookstore.Book;
+import com.beecoder.bookstore.BookAdapter;
+import com.beecoder.bookstore.R;
 import com.beecoder.bookstore.cart.Carts;
 import com.beecoder.bookstore.database.CartDatabase;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
@@ -33,7 +37,7 @@ public class HomeFragment extends Fragment implements SearchView.OnQueryTextList
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View layout = inflater.inflate(R.layout.home_layout, container, false);
         FloatingActionButton fab = layout.findViewById(R.id.fab);
-        search_bar=layout.findViewById(R.id.search_bar);
+        search_bar = layout.findViewById(R.id.search_bar);
         fab.setOnClickListener(v -> openAddBookActivity());
         search_bar.setOnQueryTextListener(this);
 
@@ -114,9 +118,8 @@ public class HomeFragment extends Fragment implements SearchView.OnQueryTextList
         return false;
     }
 
-    private void searchBook(String bookName)
-    {
-        Query query = FirebaseFirestore.getInstance().collection("Books").orderBy("title").startAt(bookName).endAt(bookName+"\uf8ff");
+    private void searchBook(String bookName) {
+        Query query = FirebaseFirestore.getInstance().collection("Books").orderBy("title").startAt(bookName).endAt(bookName + "\uf8ff");
 
 
         FirestoreRecyclerOptions options = new FirestoreRecyclerOptions.Builder<Book>()
@@ -124,6 +127,7 @@ public class HomeFragment extends Fragment implements SearchView.OnQueryTextList
                 .build();
 
         adapter = new BookAdapter(options, getActivity());
+        adapter.setOnAddToCartClickListener(this::addToCart);
         bookListView.setAdapter(adapter);
         adapter.startListening();
     }

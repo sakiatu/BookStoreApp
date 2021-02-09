@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -16,7 +15,11 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
 import com.beecoder.bookstore.Authentication.AuthActivity;
-import com.beecoder.bookstore.cart.CartActivity;
+import com.beecoder.bookstore.fragmentsMain.CartFragment;
+import com.beecoder.bookstore.fragmentsMain.CatalogueFragment;
+import com.beecoder.bookstore.fragmentsMain.ContactFragment;
+import com.beecoder.bookstore.fragmentsMain.HomeFragment;
+import com.beecoder.bookstore.fragmentsMain.ProfileFragment;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -45,17 +48,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void setUserValues() {
-        CurrentUser.getCurrentUser().setName(user.getDisplayName());
-        CurrentUser.getCurrentUser().setEmail(user.getEmail());
-        CurrentUser.getCurrentUser().setId(user.getUid());
         CurrentUser.getUserDoc()
                 .get().addOnSuccessListener(snapshot -> {
-            if (snapshot.exists() && CurrentUser.getCurrentUser().getId().equals(user.getUid())) {
+            if (snapshot.exists()) {
                 User currentUser = snapshot.toObject(User.class);
+                CurrentUser.getCurrentUser().setName(user.getDisplayName());
+                CurrentUser.getCurrentUser().setEmail(user.getEmail());
                 CurrentUser.getCurrentUser().setPhoneNumber(currentUser.getPhoneNumber());
                 CurrentUser.getCurrentUser().setPhotoUrl(currentUser.getPhotoUrl());
-
-                //Toast.makeText(this, "Asi mamah", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -90,6 +90,27 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         email.setText(user.getEmail());
     }
 
+    /* private void openSellingActivity() {
+         Intent intent = new Intent(this, SellingActivity.class);
+         startActivity(intent);
+     }
+
+     @Override
+     public boolean onPrepareOptionsMenu(Menu menu) {
+         getMenuInflater().inflate(R.menu.main_menu, menu);
+         return super.onPrepareOptionsMenu(menu);
+     }
+
+     @Override
+     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+         switch (item.getItemId()) {
+             case R.id.action_sell:
+                 openSellingActivity();
+                 break;
+         }
+         return true;
+     }
+ */
     @Override
     public void onBackPressed() {
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
@@ -111,10 +132,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 setFragment(new CatalogueFragment());
                 break;
             case R.id.profile_item:
-                setFragment(new ProfileFragment(this));
+                setFragment(new ProfileFragment());
                 break;
             case R.id.cart_item:
-                startActivity(new Intent(this,CartActivity.class));
+                setFragment(new CartFragment());
                 break;
             case R.id.contact_item:
                 setFragment(new ContactFragment());

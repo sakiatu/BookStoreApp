@@ -1,12 +1,9 @@
-package com.beecoder.bookstore;
+package com.beecoder.bookstore.fragmentsMain;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,66 +17,46 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.beecoder.bookstore.cart.CartActivity;
+import com.beecoder.bookstore.CurrentUser;
+import com.beecoder.bookstore.R;
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import static android.app.Activity.RESULT_OK;
-import static android.content.Context.MODE_PRIVATE;
 
 public class ProfileFragment extends Fragment {
-    private final int IMG_REQUEST_ID=10;
+    private final int IMG_REQUEST_ID = 10;
 
-    private TextView username, phoneNumber_tv,email;
-    private ImageView editPhone, imgBtn_photoEdit,img_userProfile,imgBtn_cart;
-    private Button btn_uploadProfileImg;
-    private Uri uri;
-    private Context context;
+    private TextView username, phoneNumber_tv, email;
+    private ImageView editPhone_iv, photoEdit_iv, profile_iv;
     FirebaseUser user;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View layout = inflater.inflate(R.layout.profile_layout, container, false);
-        user=FirebaseAuth.getInstance().getCurrentUser();
+        user = FirebaseAuth.getInstance().getCurrentUser();
         setViews(layout);
         return layout;
-    }
-
-    ProfileFragment(Context context)
-    {
-        this.context=context;
     }
 
     private void setViews(View layout) {
         email = layout.findViewById(R.id.email);
         phoneNumber_tv = layout.findViewById(R.id.phone_number);
         username = layout.findViewById(R.id.username);
-        editPhone = layout.findViewById(R.id.edit_phone_number);
-        img_userProfile=layout.findViewById(R.id.img_userProfile);
-        imgBtn_photoEdit = layout.findViewById(R.id.imgBtn_photoEdit);
-        btn_uploadProfileImg=layout.findViewById(R.id.btn_uploadProfileImg);
-        imgBtn_cart=layout.findViewById(R.id.imgBtn_cart);
-        editPhone.setOnClickListener(view -> showEditPhoneDialogue());
-        imgBtn_cart.setOnClickListener(view -> openCart());
-        if (CurrentUser.getCurrentUser() != null && CurrentUser.getCurrentUser().getId().equals(user.getUid())) {
+        editPhone_iv = layout.findViewById(R.id.edit_phone_number);
+        profile_iv = layout.findViewById(R.id.img_userProfile);
+        photoEdit_iv = layout.findViewById(R.id.imgBtn_photoEdit);
+        editPhone_iv.setOnClickListener(view -> showEditPhoneDialogue());
+
+        if (CurrentUser.getCurrentUser() != null) {
             email.setText(CurrentUser.getCurrentUser().getEmail());
             username.setText(CurrentUser.getCurrentUser().getName());
             phoneNumber_tv.setText(CurrentUser.getCurrentUser().getPhoneNumber());
-            img_userProfile.setImageURI(uri);
+            setProfilePhoto(CurrentUser.getCurrentUser().getPhotoUrl());
         }
-        imgBtn_photoEdit.setOnClickListener(v -> openGallery());
-        btn_uploadProfileImg.setOnClickListener(view -> uploadImage());
-        Glide.with(context)
-                .load(CurrentUser.getCurrentUser().getPhotoUrl())
-                .centerCrop()
-                .into(img_userProfile);
-
-    }
-
-    private void openCart() {
-        startActivity(new Intent(getActivity(),CartActivity.class));
+        photoEdit_iv.setOnClickListener(v -> openGallery());
     }
 
     private void openGallery() {
@@ -88,33 +65,58 @@ public class ProfileFragment extends Fragment {
         intent.setType("image/*");
         intent.setAction(intent.ACTION_GET_CONTENT);
         startActivityForResult(intent.createChooser(intent, "Selected Image"), IMG_REQUEST_ID);
-    } @Override
+    }
+
+    @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == IMG_REQUEST_ID && resultCode == RESULT_OK && data != null && data.getData() != null) {
-            uri = data.getData();
-            img_userProfile.setImageURI(uri);
-        }
+        if (requestCode == IMG_REQUEST_ID && resultCode == RESULT_OK && data != null && data.getData() != null)
+            showUploadDialog(data.getData());
     }
-    private void uploadImage()
-    {
-        CurrentUser.updatePhotoUrl(uri.toString())
-                .addOnCompleteListener(task -> {
-                    if(task.isSuccessful()) {
-                        Toast.makeText(getActivity(), "Successful", Toast.LENGTH_SHORT).show();
-                        Glide.with(context)
-                                .load(CurrentUser.getCurrentUser().getPhotoUrl())
-                                .centerCrop()
-                                .into(img_userProfile);
-                    }else
-                    {
-                        Toast.makeText(getActivity(), "failed :" + task.getResult(), Toast.LENGTH_SHORT).show();
-                    }
+
+    private void showUploadDialog(Uri uri) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        View view = LayoutInflater.from(getActivity()).inflate(R.layout.upload_image_dialog, null);
+        ImageView photo_iv = view.findViewById(R.id.pic_dialog_iv);
+        Button cancel_btn = view.findViewById(R.id.cancel_btn);
+        Button upload_btn = view.findViewById(R.id.upload_btn);
+        builder.setView(view);
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
+        Glide.with(getActivity()).load(uri).into(photo_iv);
+
+        cancel_btn.setOnClickListener(v -> dialog.dismiss());
+        upload_btn.setOnClickListener(v -> {
+            uploadImage(uri);
+            dialog.dismiss();
+        });
+    }
+
+    private void uploadImage(Uri uri) {
+        Toast.makeText(getActivity(), "Uploading...", Toast.LENGTH_SHORT).show();
+        CurrentUser.uploadPhoto(uri)
+                .addOnSuccessListener(s -> {
+                    CurrentUser.getPhotoRef().getDownloadUrl()
+                            .addOnSuccessListener(url -> {
+                                Toast.makeText(getActivity(), "Photo Uploaded", Toast.LENGTH_SHORT).show();
+                                CurrentUser.updatePhotoUrl(url.toString())
+                                        .addOnCompleteListener(task -> {
+                                            if (task.isSuccessful()) {
+                                                setProfilePhoto(url.toString());
+                                            }
+                                        });
+                            });
                 });
     }
 
-
+    private void setProfilePhoto(String url) {
+        Glide.with(getActivity())
+                .load(url)
+                .circleCrop()
+                .into(profile_iv);
+    }
 
     private void showEditPhoneDialogue() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());

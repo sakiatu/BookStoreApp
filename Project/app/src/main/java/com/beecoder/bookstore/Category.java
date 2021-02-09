@@ -1,6 +1,6 @@
 package com.beecoder.bookstore;
 
-class Category {
+public class Category {
     private String name;
 
     public Category() {

@@ -1,4 +1,4 @@
-package com.beecoder.bookstore;
+package com.beecoder.bookstore.fragmentsMain;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,6 +12,10 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.beecoder.bookstore.Category;
+import com.beecoder.bookstore.CategoryAdapter;
+import com.beecoder.bookstore.CategoryItemActivity;
+import com.beecoder.bookstore.R;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;

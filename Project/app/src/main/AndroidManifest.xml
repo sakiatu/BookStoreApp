@@ -13,7 +13,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".cart.CartActivity" />
+        <activity android:name=".fragmentsMain.CartFragment" />
         <activity android:name=".CategoryItemActivity" />
         <activity android:name=".AddBookActivity" />
         <activity android:name=".sell.SellingActivity" />
